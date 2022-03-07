@@ -33,6 +33,8 @@ jobs:
         run: pip install https://github.com/ansible/ansible/archive/${{ matrix.ansible }}.tar.gz --disable-pip-version-check
       - name: Install docs requirements
         run: pip install -r docs-build/requirements.txt
+      - name: Install collection
+        run: ansible-galaxy collection install $(pwd)
 
       - name: Run docs build
         run: ./docs-build/build.sh
