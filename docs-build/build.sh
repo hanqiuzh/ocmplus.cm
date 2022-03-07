@@ -2,6 +2,8 @@
 set -e
 cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null
 
+echo ' before building docs '
+echo $(pwd)
 # Create collection documentation into temporary directory
 rm -rf temp-rst
 mkdir -p temp-rst
@@ -11,7 +13,8 @@ antsibull-docs collection \
     --skip-indexes \
     --dest-dir temp-rst \
     ocmplus.cm
-
+echo 'after building docs'
+ls temp-rst
 # Copy collection documentation into source directory
 # rsync -cprv --delete-after temp-rst/ rst/
 
