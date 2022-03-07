@@ -47,7 +47,7 @@ jobs:
       - name: Commit changes
         uses: stefanzweifel/git-auto-commit-action@v4.9.2
         with:
-          commit_message: ${{ env.commit_message }}
+          commit_message: Update docs
           commit_options: '--signoff'
           file_pattern: docs/*.rst
           skip_fetch: true
