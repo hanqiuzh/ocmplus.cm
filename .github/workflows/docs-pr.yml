@@ -1,4 +1,4 @@
-name: Galaxy Publish Check
+name: Docs Check
 on:
   # Run publish check against all pushes (direct commits, also merged PRs), Pull Requests
   push:
@@ -14,8 +14,8 @@ env:
   COLLECTION_VERSION: 0.0.1 
 
 jobs:
-  check_publish:
-    name: Check Galaxy Publish
+  check_docs:
+    name: Check Plugin Docs 
     strategy:
       matrix:
         ansible:
@@ -32,4 +32,18 @@ jobs:
         run: pip install https://github.com/ansible/ansible/archive/${{ matrix.ansible }}.tar.gz --disable-pip-version-check
       - name: Install docs requirements
         run: pip install -r docs-build/requirements.txt
+      - name: Run docs build
+        run: ./docs-build/build.sh
+      - name: Move rst files
+        run: cp -f docs-build/temp-rst/* docs/
+      - name: Commit changes
+        uses: stefanzweifel/git-auto-commit-action@v4.9.2
+        with:
+          commit_message: ${{ env.commit_message }}
+          commit_options: '--signoff'
+          file_pattern: multiclusterhub/charts currentSHAs.csv
+          skip_fetch: true
+          commit_user_name: GitHub Actions
+          commit_user_email: noreply@github.com
+          commit_author: ${{ github.actor }} <${{ github.actor }}@users.noreply.github.com>    
       
