@@ -38,7 +38,7 @@ jobs:
         run: ./docs-build/build.sh
 
       - name: Move rst files
-        run: pwd && ls && ls docs-build && cp -f docs-build/temp-rst/* docs/
+        run: pwd && ls && ls docs-build/temp-rst && mv docs-build/temp-rst docs/
 
       - name: Commit changes
         uses: stefanzweifel/git-auto-commit-action@v4.9.2
