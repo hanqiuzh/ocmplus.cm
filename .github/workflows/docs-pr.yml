@@ -28,14 +28,18 @@ jobs:
         uses: actions/setup-python@v2
         with:
           python-version: 3.8
+
       - name: Install ansible-base (${{ matrix.ansible }})
         run: pip install https://github.com/ansible/ansible/archive/${{ matrix.ansible }}.tar.gz --disable-pip-version-check
       - name: Install docs requirements
         run: pip install -r docs-build/requirements.txt
+
       - name: Run docs build
         run: ./docs-build/build.sh
+
       - name: Move rst files
-        run: cp -f docs-build/temp-rst/* docs/
+        run: pwd && ls && cp -f docs-build/temp-rst/* docs/
+
       - name: Commit changes
         uses: stefanzweifel/git-auto-commit-action@v4.9.2
         with:
