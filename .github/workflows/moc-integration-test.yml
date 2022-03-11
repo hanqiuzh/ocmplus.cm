@@ -1,0 +1,36 @@
+name: CI
+on:
+  # Run CI against all pushes (direct commits, also merged PRs), Pull Requests
+  push:
+    branches: [ main, release-* ]
+  pull_request:
+    branches: [ main, release-* ]
+env:
+  NAMESPACE: ocmplus
+  COLLECTION_NAME: cm
+
+jobs:
+
+###
+# Integration tests (RECOMMENDED)
+#
+# https://docs.ansible.com/ansible/latest/dev_guide/testing_integration.html
+
+
+# If the application you are testing is available as a docker container and you want to test
+# multiple versions see the following for an example:
+# https://github.com/ansible-collections/community.zabbix/tree/master/.github/workflows
+
+  integration:
+    runs-on: ubuntu-latest
+    name: I (Ⓐ${{ matrix.ansible }}+py${{ matrix.python }})
+
+    steps:
+      - shell: bash
+        HUB_KUBECONFIG: ${{ secrets.HUB_KUBECONFIG }}
+        KUBECONFIG: "hub.kubeconfig"
+        run: |
+          curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl"
+          cat $HUB_KUBECONFIG > $KUBECONFIG
+          chmod u+x kubectl
+          kubectl cluster-info
