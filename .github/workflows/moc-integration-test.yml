@@ -32,6 +32,9 @@ jobs:
           KUBECONFIG: "hub.kubeconfig"
         run: |
           curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl"
+          echo $HUB_KUBECONFIG | wc -l
           echo $HUB_KUBECONFIG > $KUBECONFIG
-          chmod u+x kubectl
-          kubectl --kubeconfig=$KUBECONFIG cluster-info 
+          ls
+          cat $KUBECONFIG | wc -l
+#          chmod u+x kubectl
+#          kubectl --kubeconfig=$KUBECONFIG cluster-info
