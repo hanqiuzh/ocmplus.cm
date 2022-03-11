@@ -23,6 +23,7 @@ jobs:
 
   integration:
     runs-on: ubuntu-latest
+    environment: integration-test
     name: I (Ⓐ${{ matrix.ansible }}+py${{ matrix.python }})
 
     steps:
