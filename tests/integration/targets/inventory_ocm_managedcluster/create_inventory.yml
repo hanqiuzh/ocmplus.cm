@@ -1,0 +1,11 @@
+- name: "testing inventory plugin"
+  hosts: localhost
+  connection: local
+  # vars_files:
+  #   - "{{playbook_dir}}/../../integration_config.yml"
+  tasks:
+  - name: "create inventory"
+    template:
+      src: "{{playbook_dir}}/template/inventory_ocm.yml.j2"
+      dest: "{{playbook_dir}}/inventory/inventory_ocm.yml"
+    
