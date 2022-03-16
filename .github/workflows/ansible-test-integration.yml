@@ -1,6 +1,6 @@
-name: CI
+name: Integration Test
 on:
-  # Run CI against all Pull Requests
+  # Run integration tests against all Pull Requests
   pull_request_target:
     branches: [ main, release-* ]
 env:
@@ -76,7 +76,6 @@ jobs:
         with:
           version: "v0.11.1"
           kubeconfig: "/tmp/${{env.CLUSTER_NAME}}"
-          name: "${{env.CLUSTER_NAME}}"
       
       - name: Import the cluster
         run: |
@@ -127,5 +126,6 @@ jobs:
       #     fail_ci_if_error: false
       - name: Cleanup clusters
         if: always()
-        run: kubectl delete managedcluster ${CLUSTER_NAME} --timeout=10
+        run: KUBECONFIG=${HUB_KUBECONFIG} kubectl delete managedcluster ${CLUSTER_NAME} --timeout=10
+
         
