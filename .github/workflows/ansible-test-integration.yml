@@ -148,7 +148,7 @@ jobs:
         if: always()
         run: |
           export KUBECONFIG=${CLUSTER_KUBECONFIG}
-          kubectl get po -n open-cluster-management-agent
+          kubectl describe deployment -n open-cluster-management-agent
           export REGISTRATION_POD_NAME=$(kubectl get po -oname -n open-cluster-management-agent| grep registration| head -n 1)
           export KLUSTERLET_POD_NAME=$(kubectl get po -oname -n open-cluster-management-agent| grep klusterlet | grep -v registration | grep -v work | head -n 1)
           kubectl logs -n open-cluster-management-agent $REGISTRATION_POD_NAME
