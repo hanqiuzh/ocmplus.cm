@@ -62,11 +62,11 @@ jobs:
         run: pip install https://github.com/ansible/ansible/archive/${{ matrix.ansible }}.tar.gz --disable-pip-version-check
       
       # we will not run in docker mode, so we have to manually install dependencies
-      - name: Install test requirements
+      - name: Install python requirements
         working-directory: ./ansible_collections/${{env.NAMESPACE}}/${{env.COLLECTION_NAME}}
         run: |
           pip install -r tests/integration/requirements.txt
-          ansible-galaxy collection install -r tests/integration/requirements.yml
+          ansible-galaxy collection install -r tests/integration/requirements.yml -p .
       
       # OPTIONAL If your integration test requires Python libraries or modules from other collections
       # Install them like this
