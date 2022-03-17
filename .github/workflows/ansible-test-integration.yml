@@ -111,6 +111,27 @@ jobs:
           spec:
             hubAcceptsClient: true
           EOF
+          cat <<EOF | kubectl create -f -
+          apiVersion: agent.open-cluster-management.io/v1
+          kind: KlusterletAddonConfig
+          metadata:
+            name: ${CLUSTER_NAME}
+            namespace: ${CLUSTER_NAME}
+          spec:
+            clusterName: ${CLUSTER_NAME}
+            clusterNamespace: ${CLUSTER_NAME}
+            applicationManager:
+              enabled: false
+            certPolicyController:
+              enabled: false
+            iamPolicyController:
+              enabled: false
+            policyController:
+              enabled: false
+            searchCollector:
+              enabled: false
+          EOF
+
           for i in `seq 1 20`; do 
             kubectl get secret -n ${CLUSTER_NAME} ${CLUSTER_NAME}-import && break
             sleep 6
@@ -159,5 +180,6 @@ jobs:
           export KUBECONFIG=${CLUSTER_KUBECONFIG}
           kubectl get po -n open-cluster-management-agent
           KUBECONFIG=${HUB_KUBECONFIG} kubectl get managedcluster ${CLUSTER_NAME}
+          KUBECONFIG=${HUB_KUBECONFIG} kubectl get managedclusteraddon -n ${CLUSTER_NAME}
           KUBECONFIG=${HUB_KUBECONFIG} kubectl delete managedcluster ${CLUSTER_NAME} --wait=false
         
