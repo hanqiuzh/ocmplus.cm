@@ -50,7 +50,7 @@ options:
 '''
 
 EXAMPLES = r'''
-plugin: ocmplus.cm.ocm_managedcluster
+plugin: stolostron.incubator.ocm_managedcluster
 hub_kubeconfig: /path/to/hub/kubeconfig
 cluster_groups:
 - name: east-region-clusters
@@ -117,9 +117,11 @@ class InventoryModule(BaseInventoryPlugin, Constructable, Cacheable):
             hub_connection = os.getenv('K8S_AUTH_KUBECONFIG')
         else:
             # only set kubeconfig to hub's hostvar if it's provided specifically by user
-            self.inventory.set_variable(hub_host_name, 'kubeconfig', hub_connection)
+            self.inventory.set_variable(
+                hub_host_name, 'kubeconfig', hub_connection)
 
-        self.inventory.set_variable("all", "ansible_python_interpreter", sys.executable)
+        self.inventory.set_variable(
+            "all", "ansible_python_interpreter", sys.executable)
         if IMP_ERR:
             raise OCMInventoryException(IMP_ERR)
         self.fetch_objects(cluster_groups, hub_connection)
