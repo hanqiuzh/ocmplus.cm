@@ -61,7 +61,11 @@ class managed_serviceaccount(addon_base):
     def enable_feature(self):
         changed = False
         mce = get_multi_cluster_engine(
-            self.hub_client, self.module).to_dict()
+            self.hub_client, self.module)
+        if mce is None:
+            self.module.fail_json(
+                msg=f'timeout waiting for the feature {self.addon_name} to be enabled.')
+        mce = mce.to_dict()
         if not get_component_status(mce, self.module, self.component_name):
             # need to update mch
             self.update_multi_cluster_engine_feature(mce, True)
@@ -123,7 +127,7 @@ class managed_serviceaccount(addon_base):
                 content_type="application/merge-patch+json")
         except DynamicApiError as e:
             self.module.fail_json(
-                msg=f'failed to patch MultiClusterHub {mce.metadata.name}.', err=e)
+                msg=f'failed to patch MultiClusterEngine .', err=e)
 
     def update_multi_cluster_hub_feature(self, mch, state=False):
         mch_api = self.hub_client.resources.get(

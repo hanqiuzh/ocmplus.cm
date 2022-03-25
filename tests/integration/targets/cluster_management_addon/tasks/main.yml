@@ -1,0 +1,11 @@
+- name: check managed-serviceaccount
+  include_tasks: test_cluster_management_addon.yml
+  vars: 
+    addon_name: managed-serviceaccount
+  when: cluster_scoped_tests|default(false) == true
+
+- name: check cluster-proxy
+  include_tasks: test_cluster_management_addon.yml
+  vars: 
+    addon_name: cluster-proxy
+  when: cluster_scoped_tests|default(false) == true

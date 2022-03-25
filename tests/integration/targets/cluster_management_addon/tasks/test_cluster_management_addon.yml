@@ -1,0 +1,63 @@
+- name: "enable addon feature {{addon_name}}"
+  ocmplus.cm.cluster_management_addon:
+    state: present
+    hub_kubeconfig: "{{hub_kubeconfig}}"
+    addon_name: "{{addon_name}}"
+    wait: true
+    timeout: 180
+
+- name: "fetch the clustermanagementaddon CR {{addon_name}}"
+  kubernetes.core.k8s_info:
+    api_version: addon.open-cluster-management.io/v1alpha1
+    kind: ClusterManagementAddOn
+    name: "{{addon_name}}"
+    kubeconfig: "{{hub_kubeconfig}}"
+  register: result
+    
+- name: "check clustermanagementaddon {{addon_name}} CR is created"
+  assert:
+    that:
+    - "{{result.resources|length}} == 1"
+
+- name: "disable addon feature {{addon_name}}"
+  ocmplus.cm.cluster_management_addon:
+    state: absent
+    hub_kubeconfig: "{{hub_kubeconfig}}"
+    addon_name: "{{addon_name}}"
+
+- name: "make sure the clustermanagementaddon CR is deleted"
+  kubernetes.core.k8s_info:
+    api_version: addon.open-cluster-management.io/v1alpha1
+    kind: ClusterManagementAddon
+    name: "{{addon_name}}"
+    kubeconfig: "{{hub_kubeconfig}}"
+  register: result
+  until: result.resources|length == 0
+  retries: 10
+  delay: 6
+
+- name: "check clustermanagementaddon CR is created"
+  assert:
+    that:
+    - "{{result.resources|length}} == 0"
+  
+- name: "enable addon feature {{addon_name}} again"
+  ocmplus.cm.cluster_management_addon:
+    state: present
+    hub_kubeconfig: "{{hub_kubeconfig}}"
+    addon_name: "{{addon_name}}"
+    wait: true
+    timeout: 180
+  
+- name: "fetch the clustermanagementaddon CR"
+  kubernetes.core.k8s_info:
+    api_version: addon.open-cluster-management.io/v1alpha1
+    kind: ClusterManagementAddOn
+    name: "{{addon_name}}"
+    kubeconfig: "{{hub_kubeconfig}}"
+  register: result
+
+- name: "check clustermanagementaddon CR is created"
+  assert:
+    that:
+    - "{{result.resources|length}} == 1"

@@ -1,3 +1,4 @@
 hub_kubeconfig: /path/to/the/hub/kubeconfig
 managedcluster_name: managed_cluster_name
 configmap_name: test-cm-integration
+cluster_scoped_tests: false
